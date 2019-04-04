@@ -4,7 +4,7 @@ addpath('D:\spm12_7219');
 spm('defaults', 'EEG');
 % Add path
 addpath(genpath('/Users/Baotian/Desktop/ToolBoxes/EmotionalFaces'))
-
+% path
 clear
 ScriptFolder = '/Users/Baotian/Desktop/ToolBoxes/EmotionalFaces';
 cd(ScriptFolder)
