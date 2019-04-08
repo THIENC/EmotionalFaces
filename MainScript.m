@@ -2,6 +2,7 @@
 % Add SPM
 addpath('D:\³ÌÐò\spm12_7219\spm12_7219');
 spm('defaults', 'EEG');
+
 % Add path
 addpath(genpath('C:\Users\Leron Zhang\Documents\GitHub\EmotionalFaces'))
 % path manipulation
@@ -11,6 +12,7 @@ cd(ScriptFolder)
 
 SubjectFolder = 'C:\Users\Leron Zhang\Desktop\PT050_Emotional_Faces';
 cd(SubjectFolder)
+
 
 %% File IO
 % load the raw edf data and convert it to SPM format
@@ -22,8 +24,9 @@ DC = edf_TO_SPM_converter_GUI([],[],'DC_');
 %% Channel Rename
 Channel_Renaming_UI
 pause
-DC = spm_eeg_load();
 D = spm_eeg_load();
+DC = spm_eeg_load();
+
 %% Downsampling
 % Downsample the data to 1000 if > 1000Hz
 if D.fsample > 1003
