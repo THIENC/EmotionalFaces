@@ -1,15 +1,15 @@
 % Pipeline script for emotional faces
 % Add SPM
-addpath('D:\spm12_7219');
+addpath('D:\³ÌÐò\spm12_7219\spm12_7219');
 spm('defaults', 'EEG');
 % Add path
-addpath(genpath('/Users/Baotian/Desktop/ToolBoxes/EmotionalFaces'))
+addpath(genpath('C:\Users\Leron Zhang\Documents\GitHub\EmotionalFaces'))
 % path manipulation
 clear
-ScriptFolder = '/Users/Baotian/Desktop/ToolBoxes/EmotionalFaces';
+ScriptFolder = 'C:\Users\Leron Zhang\Documents\GitHub\EmotionalFaces';
 cd(ScriptFolder)
 
-SubjectFolder = '/Users/Baotian/Desktop/Data/EmotionalFaces/PT050';
+SubjectFolder = 'C:\Users\Leron Zhang\Desktop\PT050_Emotional_Faces';
 cd(SubjectFolder)
 
 %% File IO
@@ -21,6 +21,7 @@ DC = edf_TO_SPM_converter_GUI([],[],'DC_');
 
 %% Channel Rename
 Channel_Renaming_UI
+pause
 DC = spm_eeg_load();
 D = spm_eeg_load();
 %% Downsampling
