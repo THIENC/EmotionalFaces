@@ -1,15 +1,17 @@
-% Pipeline script for emotional faces
+%% Pipeline script for emotional faces
+
 % Add SPM
-addpath('D:\spm12_7219');
+addpath('C:\Users\THIENC\Desktop\spm12_7219');
 spm('defaults', 'EEG');
 % Add path
-addpath(genpath('/Users/Baotian/Desktop/ToolBoxes/EmotionalFaces'))
+addpath(genpath('C:\Users\THIENC\Desktop\EmotionalFaces'))
 % path manipulation
+
 clear
-ScriptFolder = '/Users/Baotian/Desktop/ToolBoxes/EmotionalFaces';
+ScriptFolder = 'C:\Users\THIENC\Desktop\EmotionalFaces';
 cd(ScriptFolder)
 
-SubjectFolder = '/Users/Baotian/Desktop/Data/EmotionalFaces/PT050';
+SubjectFolder = 'C:\Users\THIENC\Desktop\PT050_Emotional_Faces';
 cd(SubjectFolder)
 
 %% File IO
@@ -21,8 +23,9 @@ DC = edf_TO_SPM_converter_GUI([],[],'DC_');
 
 %% Channel Rename
 Channel_Renaming_UI
-DC = spm_eeg_load();
+pause 
 D = spm_eeg_load();
+DC = spm_eeg_load();
 %% Downsampling
 % Downsample the data to 1000 if > 1000Hz
 if D.fsample > 1003
@@ -63,21 +66,37 @@ AverageChannels(BadChannelInd) = [];
 D = D.badchannels([BadChannelInd],1);
 save(D)
 %% Epoch
-timeStampNew = FindCCEPTriggers(DC);
-timeStampNew = timeStampNew(2:3:90);
-% Compare the triggers with Behavioral data
+timeStampDC = FindCCEPTriggers(DC);
+timeStampDC = timeStampDC(2:3:90);
+% Compare the DC triggers with Behavioral data
+load('PT050_WAQIEmotionalFacesBlock1.mat');
+TheData = orderData(2:3:90,2);
+timeStampBehaviorRaw = zeros(1,length(TheData));
+for ii = 1:length(TheData)
+    timeStampBehaviorRaw(1,ii) = TheData{ii,1}.StimulusOnsetTime;
+end
+timeStampBehaviorNew = (timeStampBehaviorRaw - timeStampBehaviorRaw(1))';
+timeStampDCNew = timeStampDC - timeStampDC(1);
+figure
+plot(timeStampDCNew,'o','MarkerSize',8,'LineWidth',3)
+hold on 
+plot(timeStampBehaviorNew,'r*')
+diff = timeStampDCNew - timeStampBehaviorNew;
+if ~all(abs(diff) < 0.01)
+    error('Behavioral timestamp  and DC timestamp mismatch')
+end
 
 % define the trl
-for i = 1:length(timeStampNew)
-    trl(i,1) = timeStampNew(i)*DC.fsample - 700;
-    trl(i,2) = timeStampNew(i)*DC.fsample + 1500;
+for i = 1:length(timeStampDC)
+    trl(i,1) = timeStampDC(i)*DC.fsample - 700;
+    trl(i,2) = timeStampDC(i)*DC.fsample + 1500;
     trl(i,3) = -700;
 end
 
-
-load('PT050_WAQIEmotionalFacesBlock1.mat')
+% Define Lables
+% load('PT050_WAQIEmotionalFacesBlock1.mat')
 TagsRaw = orderData(2:3:90)';
-for i = 1:30
+for i = 1:length(TagsRaw)
     if contains(TagsRaw{i},'angry','IgnoreCase',true)
         TagsNew{i} = 'angry';
     elseif contains(TagsRaw{i},'happy','IgnoreCase',true)
@@ -94,7 +113,6 @@ S.trl = trl;
 S.prefix = 'e';
 S.conditionlabels = TagsNew';
 D = spm_eeg_epochs(S);
-%% Define bad trials
 
 %% Time Frequency decomposition
 clear S 
