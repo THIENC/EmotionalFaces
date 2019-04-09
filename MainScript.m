@@ -1,34 +1,32 @@
 %% Pipeline script for emotional faces
 
 % Add SPM
-<<<<<<< HEAD
+
 addpath('C:\Users\THIENC\Desktop\spm12_7219');
-=======
-addpath('D:\³ÌÐò\spm12_7219\spm12_7219');
->>>>>>> e3c9fc9b6f549afb2cca78a6ce5f77b43c543417
+
+% addpath('D:\³ÌÐò\spm12_7219\spm12_7219');
+
 spm('defaults', 'EEG');
 
 % Add path
-<<<<<<< HEAD
 addpath(genpath('C:\Users\THIENC\Desktop\EmotionalFaces'))
-=======
-addpath(genpath('C:\Users\Leron Zhang\Documents\GitHub\EmotionalFaces'))
->>>>>>> e3c9fc9b6f549afb2cca78a6ce5f77b43c543417
+
+% addpath(genpath('C:\Users\Leron Zhang\Documents\GitHub\EmotionalFaces'))
+
 % path manipulation
 
 clear
-<<<<<<< HEAD
+
 ScriptFolder = 'C:\Users\THIENC\Desktop\EmotionalFaces';
 cd(ScriptFolder)
 
 SubjectFolder = 'C:\Users\THIENC\Desktop\PT050_Emotional_Faces';
-=======
-ScriptFolder = 'C:\Users\Leron Zhang\Documents\GitHub\EmotionalFaces';
-cd(ScriptFolder)
 
-SubjectFolder = 'C:\Users\Leron Zhang\Desktop\PT050_Emotional_Faces';
->>>>>>> e3c9fc9b6f549afb2cca78a6ce5f77b43c543417
-cd(SubjectFolder)
+% ScriptFolder = 'C:\Users\Leron Zhang\Documents\GitHub\EmotionalFaces';
+% cd(ScriptFolder)
+% 
+% SubjectFolder = 'C:\Users\Leron Zhang\Desktop\PT050_Emotional_Faces';
+% cd(SubjectFolder)
 
 
 %% File IO
@@ -40,16 +38,10 @@ DC = edf_TO_SPM_converter_GUI([],[],'DC_');
 
 %% Channel Rename
 Channel_Renaming_UI
-<<<<<<< HEAD
-pause 
-D = spm_eeg_load();
-DC = spm_eeg_load();
-=======
 pause
 D = spm_eeg_load();
 DC = spm_eeg_load();
 
->>>>>>> e3c9fc9b6f549afb2cca78a6ce5f77b43c543417
 %% Downsampling
 % Downsample the data to 1000 if > 1000Hz
 if D.fsample > 1003
