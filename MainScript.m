@@ -2,31 +2,28 @@
 
 % Add SPM
 
-addpath('C:\Users\THIENC\Desktop\spm12_7219');
-
-% addpath('D:\³ÌÐò\spm12_7219\spm12_7219');
-
+% addpath('C:\Users\THIENC\Desktop\spm12_7219');
+addpath('D:\³ÌÐò\spm12_7219\spm12_7219');
 spm('defaults', 'EEG');
 
 % Add path
-addpath(genpath('C:\Users\THIENC\Desktop\EmotionalFaces'))
-
-% addpath(genpath('C:\Users\Leron Zhang\Documents\GitHub\EmotionalFaces'))
+% addpath(genpath('C:\Users\THIENC\Desktop\EmotionalFaces'))
+addpath(genpath('C:\Users\Leron Zhang\Documents\GitHub\EmotionalFaces'))
 
 % path manipulation
 
 clear
 
-ScriptFolder = 'C:\Users\THIENC\Desktop\EmotionalFaces';
-cd(ScriptFolder)
-
-SubjectFolder = 'C:\Users\THIENC\Desktop\PT050_Emotional_Faces';
-
-% ScriptFolder = 'C:\Users\Leron Zhang\Documents\GitHub\EmotionalFaces';
+% ScriptFolder = 'C:\Users\THIENC\Desktop\EmotionalFaces';
 % cd(ScriptFolder)
 % 
-% SubjectFolder = 'C:\Users\Leron Zhang\Desktop\PT050_Emotional_Faces';
-% cd(SubjectFolder)
+% SubjectFolder = 'C:\Users\THIENC\Desktop\PT050_Emotional_Faces';
+
+ScriptFolder = 'C:\Users\Leron Zhang\Documents\GitHub\EmotionalFaces';
+cd(ScriptFolder)
+ 
+SubjectFolder = 'C:\Users\Leron Zhang\Desktop\PT050_Emotional_Faces';
+cd(SubjectFolder)
 
 
 %% File IO

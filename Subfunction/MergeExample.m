@@ -1,6 +1,6 @@
 %% Pipeline for post reprocessing of each run of CPT
-global globalECoGDir;
-%globalECoGDir = 'G:\2.EEG_Processing_Chinese';
+% global globalECoGDir;
+globalECoGDir = 'C:\Users\Leron Zhang\Desktop\PT050_EmotionnalFaces_meeg';
 Patient_IDs = dir(globalECoGDir);
 Patient_IDs = {Patient_IDs(3:end).name}';
 for sub = 1:11
@@ -27,7 +27,7 @@ for sub = 1:11
             cd ..
         end
         cd ('mRun1_2')
-        S.D=strvcat(efile);
+        S.D=char(efile);
         S.recode='same';
         S.prefix='mRun1_2';
         D=spm_eeg_merge(S);
