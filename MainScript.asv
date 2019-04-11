@@ -126,7 +126,7 @@ S.trl = trl;
 S.prefix = 'e';
 % S.conditionlabels = TagsNew';
 D = spm_eeg_epochs(S);
-
+save(D)
 %% Time Frequency decomposition
 clear S 
 S.D                 = D;
