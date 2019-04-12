@@ -27,17 +27,38 @@ cd(SubjectFolder)
 
 
 %% File IO
+edfFiles = dir('*.edf');
+BehaviorData = dir('*.mat');
+index = [1:142];
+for i = 1:length(edfFiles)
 % load the raw edf data and convert it to SPM format
-D = edf_TO_SPM_converter_GUI([],[],'meeg_');
+D = edf_TO_SPM_converter_GUI(edfFiles(i).name,'all','meeg_');
 
 % load and convert the DC channel
-DC = edf_TO_SPM_converter_GUI([],[],'DC_');
+loc_DC = index(41);
+spm('defaults', 'EEG');
+DC = edf_TO_SPM_converter_GUI(edfFiles(i).name,loc_DC,'DC_');
 
 %% Channel Rename
-Channel_Renaming_UI
-pause
-D = spm_eeg_load();
-DC = spm_eeg_load();
+% Channel_Renaming_UI
+% pause
+% D = spm_eeg_load();
+% DC = spm_eeg_load();
+Channel_Labels_Raw = D.chanlabels';
+
+    Channel_Labels_New = Deblank_Names(Channel_Labels_Raw);
+
+    Pattern = '-Ref';
+    Channel_Labels_New = Remove_Name_Pattern(Channel_Labels_New,Pattern);
+
+    Channel_Labels_New = cellfun(@(x) x(3+1:end),Channel_Labels_New,'UniformOutput',false);
+
+    D = struct(D);
+    for j = 1:length(Channel_Labels_New)
+        D.channels(j).label = Channel_Labels_New{j};
+    end
+    D = meeg(D);
+    save(D);
 
 %% Downsampling
 % Downsample the data to 1000 if > 1000Hz
@@ -67,37 +88,37 @@ for i = 1:4
     D = spm_eeg_filter(S);
 end
 %% Bad channel detection
-% D = LBCN_filter_badchans_China();
-% D = D{1,1};
+D = LBCN_filter_badchans_China();
+D = D{1,1};
 
 %% Common average rereference
 AverageChannels = [1:D.nchannels];
-% BadChannelInd = D.badchannels;
-% AverageChannels(BadChannelInd) = [];
+BadChannelInd = D.badchannels;
+AverageChannels(BadChannelInd) = [];
 [D,montage_file] = SPM_Manual_Montage(D,'AvgM',AverageChannels);
 % label bad channel
-% D = D.badchannels([BadChannelInd],1);
+D = D.badchannels([BadChannelInd],1);
 save(D)
 %% Epoch
 timeStampDC = FindCCEPTriggers(DC);
 timeStampDC = timeStampDC(2:3:90); %find timeonsets of each trials from Emotional_Faces
 % Compare the DC triggers with Behavioral data
-% load('PT050_WAQIEmotionalFacesBlock1.mat');
-% TheData = orderData(2:3:90,2);
-% timeStampBehaviorRaw = zeros(1,length(TheData));
-% for ii = 1:length(TheData)
-%     timeStampBehaviorRaw(1,ii) = TheData{ii,1}.StimulusOnsetTime;
-% end
-% timeStampBehaviorNew = (timeStampBehaviorRaw - timeStampBehaviorRaw(1))';
-% timeStampDCNew = timeStampDC - timeStampDC(1);
-% figure
-% plot(timeStampDCNew,'o','MarkerSize',8,'LineWidth',3)
-% hold on 
-% plot(timeStampBehaviorNew,'r*')
-% diff = timeStampDCNew - timeStampBehaviorNew;
-% if ~all(abs(diff) < 0.01)
-%     error('Behavioral timestamp  and DC timestamp mismatch')
-% end
+load(BehaviorData(i).name);
+TheData = orderData(2:3:90,2);
+timeStampBehaviorRaw = zeros(1,length(TheData));
+for ii = 1:length(TheData)
+    timeStampBehaviorRaw(1,ii) = TheData{ii,1}.StimulusOnsetTime;
+end
+timeStampBehaviorNew = (timeStampBehaviorRaw - timeStampBehaviorRaw(1))';
+timeStampDCNew = timeStampDC - timeStampDC(1);
+figure
+plot(timeStampDCNew,'o','MarkerSize',8,'LineWidth',3)
+hold on 
+plot(timeStampBehaviorNew,'r*')
+diff = timeStampDCNew - timeStampBehaviorNew;
+if ~all(abs(diff) < 0.01)
+    error('Behavioral timestamp  and DC timestamp mismatch')
+end
 
 % define the trl
 for i = 1:length(timeStampDC)
@@ -107,29 +128,30 @@ for i = 1:length(timeStampDC)
 end
 
 % Define Lables
-% load('PT050_WAQIEmotionalFacesBlock1.mat')
-% TagsRaw = orderData(2:3:90)';
-% for i = 1:length(TagsRaw)
-%     if contains(TagsRaw{i},'angry','IgnoreCase',true)
-%         TagsNew{i} = 'angry';
-%     elseif contains(TagsRaw{i},'happy','IgnoreCase',true)
-%         TagsNew{i} = 'happy';
-%     elseif contains(TagsRaw{i},'neutral','IgnoreCase',true)
-%         TagsNew{i} = 'neutral';
-%     end
-% end
+TagsRaw = orderData(2:3:90)';
+for i = 1:length(TagsRaw)
+    if contains(TagsRaw{i},'angry','IgnoreCase',true)
+        TagsNew{i} = 'angry';
+    elseif contains(TagsRaw{i},'happy','IgnoreCase',true)
+        TagsNew{i} = 'happy';
+    elseif contains(TagsRaw{i},'neutral','IgnoreCase',true)
+        TagsNew{i} = 'neutral';
+    end
+end
 
 clear S
 S.D = D;
 S.bc = 1;
 S.trl = trl;
 S.prefix = 'e';
-% S.conditionlabels = TagsNew';
+S.conditionlabels = TagsNew';
 D = spm_eeg_epochs(S);
-
+save(D)
+end
 %% Time Frequency decomposition
 clear S 
 S.D                 = D;
+% S.D                 = M;
 S.channels          = 'All';     
 S.frequencies       = [1:10, 11:2:20, 21:3:40, 41:4:70, 70:5:200];
 S.method            = 'morlet'; 

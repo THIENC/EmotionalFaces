@@ -12,7 +12,5 @@ efile{1} = 'eAvgMffffdmeeg_Emotionnal_Faces_1.mat';
 efile{2} = 'eAvgMffffdmeeg_Emotionnal_Faces_2.mat';
 efile{3} = 'eAvgMffffdmeeg_Emotionnal_Faces_3.mat';
 efile = efile'
-S.D = char(efile);
+S.D = cefile);
 M = spm_eeg_merge(S);
-
-D_c = spm_eeg_load();
