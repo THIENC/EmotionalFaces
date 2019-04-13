@@ -8,7 +8,7 @@ spm('defaults', 'EEG');
 
 % Add path
 % addpath(genpath('C:\Users\THIENC\Desktop\EmotionalFaces'))
-addpath(genpath('C:\Users\Leron Zhang\Documents\GitHub\EmotionalFaces'))
+addpath(genpath('D:\GitHub\EmotionalFaces'))
 
 % path manipulation
 
@@ -88,7 +88,7 @@ for i = 1:4
     D = spm_eeg_filter(S);
 end
 %% Bad channel detection
-D = LBCN_filter_badchans_China();
+D = LBCN_filter_badchans_China(['ffffdmeeg_Emotional_Faces_' num2str(loops) '.mat'],[],[],[],[]);
 D = D{1,1};
 
 %% Common average rereference
@@ -152,7 +152,7 @@ end
 %% EEG merge
 efile = cell(length(edfFiles),1);
 for i = 1:length(edfFiles)
-    efile{i} = ['eAvgMffffdmeeg_Emotionnal_Faces_' num2str(i) '.mat'];
+    efile{i} = ['eAvgMffffdmeeg_Emotional_Faces_' num2str(i) '.mat'];
 end
 S.D = char(efile);
 S.recode = 'same';
