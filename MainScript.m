@@ -19,10 +19,10 @@ clear
 % 
 % SubjectFolder = 'C:\Users\THIENC\Desktop\PT050_Emotional_Faces';
 
-ScriptFolder = 'C:\Users\Leron Zhang\Documents\GitHub\EmotionalFaces';
+ScriptFolder = 'D:\GitHub\EmotionalFaces';
 cd(ScriptFolder)
  
-SubjectFolder = 'C:\Users\Leron Zhang\Desktop\PT050_Emotional_Faces';
+SubjectFolder = 'D:\Emotional_Faces_Data\PT050_Emotional_Faces';
 cd(SubjectFolder)
 
 
@@ -30,14 +30,14 @@ cd(SubjectFolder)
 edfFiles = dir('*.edf');
 BehaviorData = dir('*.mat');
 index = [1:142];
-for i = 1:length(edfFiles)
+for loops = 1:length(edfFiles)
 % load the raw edf data and convert it to SPM format
-D = edf_TO_SPM_converter_GUI(edfFiles(i).name,'all','meeg_');
+D = edf_TO_SPM_converter_GUI(edfFiles(loops).name,'all','meeg_');
 
 % load and convert the DC channel
 loc_DC = index(41);
 spm('defaults', 'EEG');
-DC = edf_TO_SPM_converter_GUI(edfFiles(i).name,loc_DC,'DC_');
+DC = edf_TO_SPM_converter_GUI(edfFiles(loops).name,loc_DC,'DC_');
 
 %% Channel Rename
 % Channel_Renaming_UI
@@ -103,7 +103,7 @@ save(D)
 timeStampDC = FindCCEPTriggers(DC);
 timeStampDC = timeStampDC(2:3:90); %find timeonsets of each trials from Emotional_Faces
 % Compare the DC triggers with Behavioral data
-load(BehaviorData(i).name);
+load(BehaviorData(loops).name);
 TheData = orderData(2:3:90,2);
 timeStampBehaviorRaw = zeros(1,length(TheData));
 for ii = 1:length(TheData)
@@ -148,17 +148,26 @@ S.conditionlabels = TagsNew';
 D = spm_eeg_epochs(S);
 save(D)
 end
+
+%% EEG merge
+efile = cell(length(edfFiles),1);
+for i = 1:length(edfFiles)
+    efile{i} = ['eAvgMffffdmeeg_Emotionnal_Faces_' num2str(i) '.mat'];
+end
+S.D = char(efile);
+S.recode = 'same';
+S.prefix = 'c';
+D = spm_eeg_merge(S);
+save(D)
 %% Time Frequency decomposition
 clear S 
 S.D                 = D;
-% S.D                 = M;
 S.channels          = 'All';     
 S.frequencies       = [1:10, 11:2:20, 21:3:40, 41:4:70, 70:5:200];
 S.method            = 'morlet'; 
 S.phase             = 0;      
 S.prefix            = 'tf_'; 
 D = spm_eeg_tf(S);
-
 
 %% Crop before the TF rescale
 clear S 
