@@ -8,7 +8,7 @@ spm('defaults', 'EEG');
 
 % Add path
 % addpath(genpath('C:\Users\THIENC\Desktop\EmotionalFaces'))
-addpath(genpath('C:\Users\Leron Zhang\Documents\GitHub\EmotionalFaces'))
+addpath(genpath('D:\GitHub\EmotionalFaces'))
 
 % path manipulation
 
@@ -19,10 +19,10 @@ clear
 % 
 % SubjectFolder = 'C:\Users\THIENC\Desktop\PT050_Emotional_Faces';
 
-ScriptFolder = 'C:\Users\Leron Zhang\Documents\GitHub\EmotionalFaces';
+ScriptFolder = 'D:\GitHub\EmotionalFaces';
 cd(ScriptFolder)
  
-SubjectFolder = 'C:\Users\Leron Zhang\Desktop\PT050_Emotional_Faces';
+SubjectFolder = 'D:\Emotional_Faces_Data\PT050_Emotional_Faces';
 cd(SubjectFolder)
 
 
@@ -88,7 +88,7 @@ for i = 1:4
     D = spm_eeg_filter(S);
 end
 %% Bad channel detection
-D = LBCN_filter_badchans_China();
+D = LBCN_filter_badchans_China(['ffffdmeeg_Emotional_Faces_' num2str(loops) '.mat'],[],[],[],[]);
 D = D{1,1};
 
 %% Common average rereference
@@ -152,7 +152,11 @@ end
 %% EEG merge
 efile = cell(length(edfFiles),1);
 for i = 1:length(edfFiles)
+<<<<<<< HEAD
     efile{i} = ['eAvgMffffdmeeg_Emotionnal_Faces_' num2str(i) '.mat'];
+=======
+    efile{i} = ['eAvgMffffdmeeg_Emotional_Faces_' num2str(i) '.mat'];
+>>>>>>> 64f502c019e4e7eb45a35c2e2bebd61d1b89a0a4
 end
 S.D = char(efile);
 S.recode = 'same';
