@@ -19,7 +19,7 @@ clear
 % 
 % SubjectFolder = 'C:\Users\THIENC\Desktop\PT050_Emotional_Faces';
 
-ScriptFolder = 'D:\GitHub\EmotionalFaces';
+ScriptFolder = 'C:\Users\Leron Zhang\Documents\GitHub\EmotionalFaces';
 cd(ScriptFolder)
  
 SubjectFolder = 'D:\Emotional_Faces_Data\PT050_Emotional_Faces';
@@ -88,7 +88,7 @@ for i = 1:4
     D = spm_eeg_filter(S);
 end
 %% Bad channel detection
-D = LBCN_filter_badchans_China('');
+D = LBCN_filter_badchans_China(['ffffdmeeg_Emotional_Faces_' num2str(loops) '.mat'],[],[],[],[]);
 D = D{1,1};
 
 %% Common average rereference
@@ -147,10 +147,6 @@ S.prefix = 'e';
 S.conditionlabels = TagsNew';
 D = spm_eeg_epochs(S);
 save(D)
-<<<<<<< HEAD
-
-=======
->>>>>>> 64f502c019e4e7eb45a35c2e2bebd61d1b89a0a4
 end
 
 %% EEG merge
@@ -158,14 +154,11 @@ efile = cell(length(edfFiles),1);
 for i = 1:length(edfFiles)
     efile{i} = ['eAvgMffffdmeeg_Emotionnal_Faces_' num2str(i) '.mat'];
 end
-<<<<<<< HEAD
-=======
 S.D = char(efile);
 S.recode = 'same';
 S.prefix = 'c';
 D = spm_eeg_merge(S);
 save(D)
->>>>>>> 64f502c019e4e7eb45a35c2e2bebd61d1b89a0a4
 %% Time Frequency decomposition
 clear S 
 S.D                 = D;

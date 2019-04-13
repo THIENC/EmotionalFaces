@@ -152,7 +152,7 @@ end
 %% EEG merge
 efile = cell(length(edfFiles),1);
 for i = 1:length(edfFiles)
-    efile{i} = ['eAvgMffffdmeeg_Emotionnal_Faces_' num2str(i) '.mat'];
+    efile{i} = ['eAvgMffffdmeeg_Emotional_Faces_' num2str(i) '.mat'];
 end
 S.D = char(efile);
 S.recode = 'same';
