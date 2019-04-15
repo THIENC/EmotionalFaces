@@ -39,7 +39,7 @@ end
 montage.tra = tra;
 montage.labelnew = labelnew;
 montage.labelorg = labelorg;
-spm_eeg_montage_ui(montage)
+% spm_eeg_montage_ui(montage)
 montage_file = montage;
 save('Manual_Montage_file','montage');  
 

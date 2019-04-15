@@ -13,7 +13,7 @@ if nargin < 1 || isempty(filename)
 end
 if nargin < 2 || isempty(index_to_keep)
     % read edf header using function in field trip
-    edf_header = ft_read_header(filename_full);
+    edf_header = ft_read_header(filename);
     [index_to_keep,~] = listdlg('ListString',edf_header.label,'PromptString','Select Channels to Keep' );
 end
 if nargin < 3 || isempty(prefix)
@@ -22,6 +22,7 @@ if nargin < 3 || isempty(prefix)
 end
 
 filename_full = filename;
+edf_header = ft_read_header(filename_full);
 % convert the data
 S.dataset = filename_full;
 S.mode  = 'continuous';
