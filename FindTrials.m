@@ -52,6 +52,10 @@ end
 
 % shade error bar
 figure
+axis xy
+title(['Channel' '_' D.chanlabels{i}],)
+xlabel('Time(s)')
+ylabel('Power')
 shadedErrorBar([],PowertoPlot_happy,{@median,@std},{'r-o','markerfacecolor','r'});
 hold on
 shadedErrorBar([],PowertoPlot_angry,{@median,@std},{'b-*','markerfacecolor','b'}); 
