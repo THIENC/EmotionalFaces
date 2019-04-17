@@ -193,7 +193,7 @@ FrequenciesOfInterest = [1:10, 11:2:20, 21:3:40, 41:4:70, 70:5:200];
 for i = 1:D.nchannels
     figure
     SmoothedImage = imgaussfilt(squeeze(FinalTaskEEGTFMeanEpoch(i,:,:)),[1,20]);
-    imagesc(SmoothedImage)
+    imagesc(SmoothedImage)00
     axis xy
     title(['Channel' '_' D.chanlabels{i}],'Interpreter','none')
     c = colorbar;
