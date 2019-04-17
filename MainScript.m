@@ -2,27 +2,27 @@
 
 % Add SPM
 
-% addpath('C:\Users\THIENC\Desktop\spm12_7219');
-addpath('D:\³ÌÐò\spm12_7219\spm12_7219');
+addpath('C:\Users\THIENC\Desktop\spm12_7219');
+% addpath('D:\³ÌÐò\spm12_7219\spm12_7219');
 spm('defaults', 'EEG');
 
 % Add path
-% addpath(genpath('C:\Users\THIENC\Desktop\EmotionalFaces'))
-addpath(genpath('D:\GitHub\EmotionalFaces'))
+addpath(genpath('C:\Users\THIENC\Desktop\EmotionalFaces'))
+% addpath(genpath('D:\GitHub\EmotionalFaces'))
 
 % path manipulation
 
 clear
 
-% ScriptFolder = 'C:\Users\THIENC\Desktop\EmotionalFaces';
-% cd(ScriptFolder)
-% 
-% SubjectFolder = 'C:\Users\THIENC\Desktop\PT050_Emotional_Faces';
- 
-ScriptFolder = 'D:\GitHub\EmotionalFaces';
+ScriptFolder = 'C:\Users\THIENC\Desktop\EmotionalFaces';
 cd(ScriptFolder)
-  
-SubjectFolder = 'D:\Emotional_Faces_Data\PT050_Emotional_Faces';
+% 
+SubjectFolder = 'C:\Users\THIENC\Desktop\PT050_Emotional_Faces';
+%  
+% ScriptFolder = 'D:\GitHub\EmotionalFaces';
+% cd(ScriptFolder)
+%   
+% SubjectFolder = 'D:\Emotional_Faces_Data\PT050_Emotional_Faces';
 cd(SubjectFolder)
 
 
@@ -195,7 +195,7 @@ FrequenciesOfInterest = [1:10, 11:2:20, 21:3:40, 41:4:70, 70:5:200];
 for i = 1:D.nchannels
     figure
     SmoothedImage = imgaussfilt(squeeze(FinalTaskEEGTFMeanEpoch(i,:,:)),[1,20]);
-    imagesc(SmoothedImage)00
+    imagesc(SmoothedImage)
     axis xy
     title(['Channel' '_' D.chanlabels{i}],'Interpreter','none')
     c = colorbar;

@@ -1,5 +1,5 @@
 %% Find trials in different conditions 
-
+d = struct(D);
 happy = zeros(1,size(FinalTaskEEGTF,4));
 angry = zeros(1,size(FinalTaskEEGTF,4));
 neutral = zeros(1,size(FinalTaskEEGTF,4));
@@ -52,13 +52,15 @@ end
 
 % shade error bar
 figure
-axis xy
-title(['Channel' '_' D.chanlabels{i}],)
+title(['Channel' '_' D.chanlabels{j} ,'Interpreter','none'])
 xlabel('Time(s)')
 ylabel('Power')
+line([501 501],[-400,400],'Color','g','LineStyle','--','LineWidth',1)
 shadedErrorBar([],PowertoPlot_happy,{@median,@std},{'r-o','markerfacecolor','r'});
 hold on
 shadedErrorBar([],PowertoPlot_angry,{@median,@std},{'b-*','markerfacecolor','b'}); 
 hold on
 shadedErrorBar([],PowertoPlot_neutral,{@median,@std},{'g-.','markerfacecolor','g'}); 
+print([ 'Channel' '_' D.chanlabels{j}],'-dpng')
+close
 end

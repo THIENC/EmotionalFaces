@@ -1,5 +1,5 @@
 %% Find trials in different conditions 
-
+d = struct(D);
 happy = zeros(1,size(FinalTaskEEGTF,4));
 angry = zeros(1,size(FinalTaskEEGTF,4));
 neutral = zeros(1,size(FinalTaskEEGTF,4));
@@ -35,7 +35,7 @@ end
 PowertoPlot_angry = [];
 for i = 1:10
 Angry = squeeze(S.angry(j,:,:,i));
-HighFrequency_angry = Angry([31:57],:);%Ñ¡Ôñ¸ßÆµ¶ÎÎª[70:5:200]
+HighFrequency_angry = Angry([31:57],:);
 MeanPower_angry = mean(HighFrequency_angry,1);
 PowertoPlot_angry = [PowertoPlot_angry;MeanPower_angry];
 end
@@ -45,16 +45,22 @@ end
 PowertoPlot_neutral = [];
 for i = 1:10
 Neutral = squeeze(S.neutral(j,:,:,i));
-HighFrequency_neutral = Neutral([31:57],:);%High frequency bands [70:5:200]
+HighFrequency_neutral = Neutral([31:57],:);
 MeanPower_neutral = mean(HighFrequency_neutral,1);
 PowertoPlot_neutral = [PowertoPlot_neutral;MeanPower_neutral];
 end
 
 % shade error bar
 figure
+title(['Channel' '_' D.chanlabels{j} ,'Interpreter','none'])
+xlabel('Time(s)')
+ylabel('Power')
+line([501 501],[],'Color','g','LineStyle','-','LineWidth',1)
 shadedErrorBar([],PowertoPlot_happy,{@median,@std},{'r-o','markerfacecolor','r'});
 hold on
 shadedErrorBar([],PowertoPlot_angry,{@median,@std},{'b-*','markerfacecolor','b'}); 
 hold on
 shadedErrorBar([],PowertoPlot_neutral,{@median,@std},{'g-.','markerfacecolor','g'}); 
+print([ 'Channel' '_' D.chanlabels{j}],'-dpng')
+close
 end
