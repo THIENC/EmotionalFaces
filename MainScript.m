@@ -2,27 +2,28 @@
 
 % Add SPM
 
-addpath('C:\Users\THIENC\Desktop\spm12_7219');
-% addpath('D:\³ÌÐò\spm12_7219\spm12_7219');
+% addpath('C:\Users\THIENC\Desktop\spm12_7219');
+addpath('D:\³ÌÐò\spm12_7219\spm12_7219');
 spm('defaults', 'EEG');
 
 % Add path
-addpath(genpath('C:\Users\THIENC\Desktop\EmotionalFaces'))
-% addpath(genpath('D:\GitHub\EmotionalFaces'))
+% addpath(genpath('C:\Users\THIENC\Desktop\EmotionalFaces'))
+addpath(genpath('D:\GitHub\EmotionalFaces'))
 
 % path manipulation
 
 clear
 
-ScriptFolder = 'C:\Users\THIENC\Desktop\EmotionalFaces';
-cd(ScriptFolder)
-% 
-SubjectFolder = 'C:\Users\THIENC\Desktop\PT050_Emotional_Faces';
-%  
-% ScriptFolder = 'D:\GitHub\EmotionalFaces';
+% ScriptFolder = 'C:\Users\THIENC\Desktop\EmotionalFaces';
 % cd(ScriptFolder)
-%   
-% SubjectFolder = 'D:\Emotional_Faces_Data\PT050_Emotional_Faces';
+% 
+% SubjectFolder = 'C:\Users\THIENC\Desktop\PT050_Emotional_Faces';
+% cd(SubjectFolder)
+
+ScriptFolder = 'D:\GitHub\EmotionalFaces';
+cd(ScriptFolder)
+  
+SubjectFolder = 'D:\Emotional_Faces_Data\PT050_Emotional_Faces';
 cd(SubjectFolder)
 
 
@@ -104,7 +105,8 @@ save(D)
 timeStampDC = FindCCEPTriggers(DC);
 timeStampDC = timeStampDC(2:3:90); %find timeonsets of each trials from Emotional_Faces
 % Compare the DC triggers with Behavioral data
-load(BehaviorData(loops).name);
+
+;
 pause
 TheData = orderData(2:3:90,2);
 timeStampBehaviorRaw = zeros(1,length(TheData));
@@ -210,6 +212,6 @@ for i = 1:D.nchannels
     set(gca,'FontSize',25)
     set(gcf,'position',[100 100 1100 800])
     line([501 501],[0 57],'Color','w','LineStyle','--','LineWidth',4)
-    print([ 'Channel' '_' D.chanlabels{i}],'-dpng')
+    print([ 'tf_Channel' '_' D.chanlabels{i}],'-dpng')
     close
 end

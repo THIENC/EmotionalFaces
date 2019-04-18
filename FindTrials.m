@@ -61,6 +61,6 @@ hold on
 shadedErrorBar([],PowertoPlot_angry,{@median,@std},{'b-*','markerfacecolor','b'}); 
 hold on
 shadedErrorBar([],PowertoPlot_neutral,{@median,@std},{'g-.','markerfacecolor','g'}); 
-print([ 'Channel' '_' D.chanlabels{j}],'-dpng')
+print([ 'power_Channel' '_' D.chanlabels{j}],'-dpng')
 close
 end
