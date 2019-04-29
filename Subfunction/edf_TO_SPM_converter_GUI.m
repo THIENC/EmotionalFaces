@@ -14,7 +14,7 @@ if nargin < 1 || isempty(filename)
 end
 if nargin < 2 || isempty(index_to_keep)
     % read edf header using function in field trip
-    edf_header = ft_read_header(filename);
+   edf_header = ft_read_header(filename);
     [index_to_keep,~] = listdlg('ListString',edf_header.label,'PromptString','Select Channels to Keep' );
     IndexInUse = index_to_keep;
 end
