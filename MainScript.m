@@ -1,7 +1,6 @@
 %% Pipeline script for emotional faces
 
 % Add SPM
-
 % addpath('C:\Users\THIENC\Desktop\spm12_7219');
 addpath('D:\spm12_7219');
 spm('defaults', 'EEG');

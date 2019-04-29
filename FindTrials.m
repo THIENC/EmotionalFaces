@@ -13,7 +13,6 @@ for i = 1:size(FinalTaskEEGTF,4)
     end
 end
 
-
 clear S
 S.happy = FinalTaskEEGTF(:,:,:,[find(happy)]);
 S.angry = FinalTaskEEGTF(:,:,:,[find(angry)]);

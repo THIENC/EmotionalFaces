@@ -2,16 +2,12 @@
 clear
 PatientList = [32,33,35,37:40,42:47];
 IndexInUse = struct;
-cd('E:\')
+cd('E:\EmotionalFaces')
 MainDir = dir('*0*');
 for i = 1:length(PatientList)
     for j = 1:length(MainDir)
     if contains(MainDir(j).name,['0' num2str(PatientList(i))])
         cd(MainDir(j).name)
-        ECoGDir = dir('*ECoG');
-        cd(ECoGDir.name)
-        EmotionalDir = dir('Emotional*');
-        cd(EmotionalDir.name)
         %% for channels
         [filename, path] = uigetfile('*.edf','Please select edf file to convert');
         % read edf header using function in field trip
