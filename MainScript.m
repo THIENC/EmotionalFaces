@@ -15,10 +15,10 @@ clear
 ScriptFolder = 'D:\EmotionalFaces';
 cd(ScriptFolder)
 
-SubjectFolder = 'E:\EmotionalFaces';
+SubjectFolder = 'E:\';
 cd(SubjectFolder)
 
-PatientList = [32,33,35,37:47];
+% PatientList = [32,33,35,37:47];
 % % Move the edf files to the analysis folder
 % for i = 1:length(PatientList)
 %     cd('T:\')
@@ -57,9 +57,11 @@ PatientList = [32,33,35,37:47];
 %         end
 %     end
 % end
+load('EmotionalFacesChannels.mat')
 cd('E:\EmotionalFaces')
 EmotionalDir = dir(pwd);
 EmotionalDir = EmotionalDir(3:end);
+
 %% File IO
 for i = 1:length(EmotionalDir)
     cd(EmotionalDir(i).name)
@@ -68,12 +70,10 @@ for i = 1:length(EmotionalDir)
     for loops = 1:length(edfFiles)
         
         % load the raw edf data and convert it to SPM format
-        [D,IndexInUse] = edf_TO_SPM_converter_GUI(edfFiles(loops).name,[]'meeg_');
+        [D,Index] = edf_TO_SPM_converter_GUI(edfFiles(loops).name,IndexInUse(i).Channels,'meeg_');
         
         % load and convert the DC channel
-        loc_DC = index(41);
-        spm('defaults', 'EEG');
-        DC = edf_TO_SPM_converter_GUI(edfFiles(loops).name,[],'DC_');
+        [DC,Index] = edf_TO_SPM_converter_GUI(edfFiles(loops).name,IndexInUse(i).DCChannel,'DC_');
         
         %% Channel Rename
         % Channel_Renaming_UI
@@ -124,7 +124,7 @@ for i = 1:length(EmotionalDir)
             D = spm_eeg_filter(S);
         end
         %% Bad channel detection
-        D = LBCN_filter_badchans_China(['ffffdmeeg_Emotional_Faces_' num2str(loops) '.mat'],[],[],[],[]);
+        D = LBCN_filter_badchans_China(D.fname,[],[],[],[]);
         D = D{1,1};
         
         %% Common average rereference
@@ -140,7 +140,7 @@ for i = 1:length(EmotionalDir)
         timeStampDC = timeStampDC(2:3:90); %find timeonsets of each trials from Emotional_Faces
         % Compare the DC triggers with Behavioral data
         
-        pause
+        load(BehaviorData(loops).name);
         TheData = orderData(2:3:90,2);
         timeStampBehaviorRaw = zeros(1,length(TheData));
         for ii = 1:length(TheData)
@@ -248,4 +248,5 @@ for i = 1:length(EmotionalDir)
         print([ 'tf_Channel' '_' D.chanlabels{i}],'-dpng')
         close
     end
+    cd ..
 end
