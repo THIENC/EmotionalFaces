@@ -10,7 +10,7 @@
 % addpath(genpath('D:\EmotionalFaces'))
 clear
 % path manipulation
-[ScriptFolder,SubjectFolder] = PathManipulation('BaotianMacmini');
+[ScriptFolder,SubjectFolder] = PathManipulation('BaotianZ620');
 
 % ScriptFolder = 'D:\EmotionalFaces';
 cd(ScriptFolder)
@@ -19,24 +19,24 @@ cd(ScriptFolder)
 cd(SubjectFolder)
 
 load('EmotionalFacesChannels.mat')
-cd('/Users/Baotian/Desktop/Data/EmotionalFaces')
+cd('E:\EmotionalFaces')
 EmotionalDir = dir(pwd);
 EmotionalDir = EmotionalDir(3:end);
 
 %% File IO
-for i = 1 :length(EmotionalDir)
-    cd(EmotionalDir(i).name)
+for Sub = 1:3
+    cd(EmotionalDir(Sub).name)
     edfFiles = dir('*.edf');
-    BehaviorData = dir('*.mat');
+    BehaviorData = dir('*0*.mat');
     for loops = 1:length(edfFiles)
         
         % load the raw edf data and convert it to SPM format
-        [D,Index] = edf_TO_SPM_converter_GUI(edfFiles(loops).name,IndexInUse(i).Channels,'meeg_');
+        [D,Index] = edf_TO_SPM_converter_GUI(edfFiles(loops).name,IndexInUse(Sub).Channels,'meeg_');
         
         % load and convert the DC channel
-        [DC,Index] = edf_TO_SPM_converter_GUI(edfFiles(loops).name,IndexInUse(i).DCChannel,'DC_');
+        [DC,Index] = edf_TO_SPM_converter_GUI(edfFiles(loops).name,IndexInUse(Sub).DCChannel,'DC_');
         
-        %% Channel Rename
+       %% Channel Rename
         % Channel_Renaming_UI
         % pause
         % D = spm_eeg_load();
@@ -114,21 +114,21 @@ for i = 1 :length(EmotionalDir)
         timeStampDCNew = timeStampDC - timeStampDC(1);
         cd('figs')
         figure
-        plot(timeStampDCNew,'o','MarkerSize',8,'LineWidth',3)
+        plot(diff(timeStampDCNew),'o','MarkerSize',8,'LineWidth',3)
         hold on
-        plot(timeStampBehaviorNew,'r*')
-        diff = timeStampDCNew - timeStampBehaviorNew;
-        % print the figure here
-        if ~all(abs(diff) < 0.01)
+        plot(diff(timeStampBehaviorNew),'r*')
+        difference = timeStampDCNew - timeStampBehaviorNew;
+        print(['Behavioral_DC_' num2str(loops)],'-dpng')
+        if ~all(abs(difference) < 0.01)
             error('Behavioral timestamp  and DC timestamp mismatch')
         end
         cd ..
         
         % define the trl
         for i = 1:length(timeStampDC)
-            trl(i,1) = timeStampDC(i)*DC.fsample - 700;
-            trl(i,2) = timeStampDC(i)*DC.fsample + 1500;
-            trl(i,3) = -700;
+            trl(i,1) = timeStampDC(i)*DC.fsample - 600;
+            trl(i,2) = timeStampDC(i)*DC.fsample + 1600;
+            trl(i,3) = -600;
         end
         
         % Define Lables
@@ -151,14 +151,14 @@ for i = 1 :length(EmotionalDir)
         S.conditionlabels = TagsNew';
         D = spm_eeg_epochs(S);
         save(D)
+        % For EEG merge
+               
+        FileCombine(loops,:) = D.fname;
     end
     
     %% EEG merge
-    efile = cell(length(edfFiles),1);
-    for i = 1:length(edfFiles)
-        efile{i} = ['eAvgMffffdmeeg_Emotional_Faces_' num2str(i) '.mat'];
-    end
-    S.D = char(efile);
+    clear S
+    S.D = FileCombine;
     S.recode = 'same';
     S.prefix = 'c';
     D = spm_eeg_merge(S);
@@ -178,14 +178,14 @@ for i = 1 :length(EmotionalDir)
     %% Crop before the TF rescale
     clear S
     S.D = D;
-    S.timewin = [-600 1400];
+    S.timewin = [-500 1500];
     D = spm_eeg_crop(S);
     
     %% Rescale the raw TF map
     clear S
     S.D            = D;
     S.method       = 'Rel';
-    S.timewin      = [-600 0];
+    S.timewin      = [-500 0];
     
     D = spm_eeg_tf_rescale(S);
     
@@ -196,6 +196,7 @@ for i = 1 :length(EmotionalDir)
     % Smooth the TF map before plot
     % Selected Channel to plot
     % FrequenciesOfInterest = [1:10, 11:2:20, 21:3:40, 41:4:70, 70:5:200];
+    cd('figs')
     FrequenciesOfInterest = [1:10, 11:2:20, 21:5:40, 41:10:70, 70:10:200];
     for i = 1:D.nchannels
         figure
@@ -208,15 +209,16 @@ for i = 1 :length(EmotionalDir)
         colormap('jet')
         xticks([101:200:2001]);
         xticklabels([-0.400:0.200:1.500]);
-        yticks([1:3:57])
-        yticklabels(FrequenciesOfInterest(1:3:57));
+        yticks([1:3:36])
+        yticklabels(FrequenciesOfInterest(1:3:36));
         xlabel('Time(s)')
         ylabel('Frequency(Hz)')
         set(gca,'FontSize',25)
         set(gcf,'position',[100 100 1100 800])
-        line([501 501],[0 57],'Color','w','LineStyle','--','LineWidth',4)
+        line([501 501],[0 36],'Color','w','LineStyle','--','LineWidth',4)
         print([ 'tf_Channel' '_' D.chanlabels{i}],'-dpng')
         close
     end
+    cd ..
     cd ..
 end
