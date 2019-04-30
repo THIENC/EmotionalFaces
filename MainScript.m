@@ -1,69 +1,30 @@
 %% Pipeline script for emotional faces
 
-% Add SPM
-% addpath('C:\Users\THIENC\Desktop\spm12_7219');
-addpath('D:\spm12_7219');
-spm('defaults', 'EEG');
-
-% Add path
-% addpath(genpath('C:\Users\THIENC\Desktop\EmotionalFaces'))
-addpath(genpath('D:\EmotionalFaces'))
-
-% path manipulation
+% % Add SPM
+% % addpath('C:\Users\THIENC\Desktop\spm12_7219');
+% addpath('D:\spm12_7219');
+% spm('defaults', 'EEG');
+% 
+% % Add path
+% % addpath(genpath('C:\Users\THIENC\Desktop\EmotionalFaces'))
+% addpath(genpath('D:\EmotionalFaces'))
 clear
+% path manipulation
+[ScriptFolder,SubjectFolder] = PathManipulation('BaotianMacmini');
 
-ScriptFolder = 'D:\EmotionalFaces';
+% ScriptFolder = 'D:\EmotionalFaces';
 cd(ScriptFolder)
 
-SubjectFolder = 'E:\';
+% SubjectFolder = 'E:\';
 cd(SubjectFolder)
 
-% PatientList = [32,33,35,37:47];
-% % Move the edf files to the analysis folder
-% for i = 1:length(PatientList)
-%     cd('T:\')
-%     MainDir = dir('*0*');
-%     for j = 1:length(MainDir)
-%         if contains(MainDir(j).name,['0' num2str(PatientList(i))])
-%             mkdir(['E:\EmotionalFaces\' 'PT0' num2str(PatientList(i))])
-%             cd(MainDir(j).name)
-%             ECoGDir = dir('*ECoG');
-%             cd(ECoGDir.name)
-%             EmotionalDir = dir('Emotional*');
-%             cd(EmotionalDir.name)
-%             copyfile('*.edf',['E:\EmotionalFaces\' 'PT0' num2str(PatientList(i))])
-%             cd ..
-%             cd ..
-%             cd ..
-%         end
-%     end
-% end
-
-% % Move the mat files to the analysis folder
-% for i = 1:length(PatientList)
-%     cd('T:\')
-%     MainDir = dir('*0*');
-%     for j = 1:length(MainDir)
-%         if contains(MainDir(j).name,['0' num2str(PatientList(i))])
-%             cd(MainDir(j).name)
-%             ECoGDir = dir('*Behavioral');
-%             cd(ECoGDir.name)
-%             EmotionalDir = dir('Emotional*');
-%             cd(EmotionalDir.name)
-%             copyfile('*.mat',['E:\EmotionalFaces\' 'PT0' num2str(PatientList(i))])
-%             cd ..
-%             cd ..
-%             cd ..
-%         end
-%     end
-% end
 load('EmotionalFacesChannels.mat')
-cd('E:\EmotionalFaces')
+cd('/Users/Baotian/Desktop/Data/EmotionalFaces')
 EmotionalDir = dir(pwd);
 EmotionalDir = EmotionalDir(3:end);
 
 %% File IO
-for i = 1:length(EmotionalDir)
+for i = 1 :length(EmotionalDir)
     cd(EmotionalDir(i).name)
     edfFiles = dir('*.edf');
     BehaviorData = dir('*.mat');
@@ -136,8 +97,11 @@ for i = 1:length(EmotionalDir)
         D = D.badchannels([BadChannelInd],1);
         save(D)
         %% Epoch
+        mkdir('figs')
+        cd('figs')
         timeStampDC = FindCCEPTriggers(DC);
         timeStampDC = timeStampDC(2:3:90); %find timeonsets of each trials from Emotional_Faces
+        cd ..
         % Compare the DC triggers with Behavioral data
         
         load(BehaviorData(loops).name);
@@ -148,14 +112,17 @@ for i = 1:length(EmotionalDir)
         end
         timeStampBehaviorNew = (timeStampBehaviorRaw - timeStampBehaviorRaw(1))';
         timeStampDCNew = timeStampDC - timeStampDC(1);
+        cd('figs')
         figure
         plot(timeStampDCNew,'o','MarkerSize',8,'LineWidth',3)
         hold on
         plot(timeStampBehaviorNew,'r*')
         diff = timeStampDCNew - timeStampBehaviorNew;
+        % print the figure here
         if ~all(abs(diff) < 0.01)
             error('Behavioral timestamp  and DC timestamp mismatch')
         end
+        cd ..
         
         % define the trl
         for i = 1:length(timeStampDC)
@@ -200,10 +167,12 @@ for i = 1:length(EmotionalDir)
     clear S
     S.D                 = D;
     S.channels          = 'All';
-    S.frequencies       = [1:10, 11:2:20, 21:3:40, 41:4:70, 70:5:200];
+    % S.frequencies       = [1:10, 11:2:20, 21:3:40, 41:4:70, 70:5:200]; %
+    % for finer frequency resolution
+    S.frequencies       = [1:10, 11:2:20, 21:5:40, 41:10:70, 70:10:200]; % For faster speed
     S.method            = 'morlet';
     S.phase             = 0;
-    S.prefix            = 'tf_';
+    S.prefix            = [];
     D = spm_eeg_tf(S);
     
     %% Crop before the TF rescale
@@ -226,7 +195,8 @@ for i = 1:length(EmotionalDir)
     
     % Smooth the TF map before plot
     % Selected Channel to plot
-    FrequenciesOfInterest = [1:10, 11:2:20, 21:3:40, 41:4:70, 70:5:200];
+    % FrequenciesOfInterest = [1:10, 11:2:20, 21:3:40, 41:4:70, 70:5:200];
+    FrequenciesOfInterest = [1:10, 11:2:20, 21:5:40, 41:10:70, 70:10:200];
     for i = 1:D.nchannels
         figure
         SmoothedImage = imgaussfilt(squeeze(FinalTaskEEGTFMeanEpoch(i,:,:)),[1,20]);
