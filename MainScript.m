@@ -24,10 +24,11 @@ EmotionalDir = dir(pwd);
 EmotionalDir = EmotionalDir(3:end);
 
 %% File IO
-for Sub = 1:3
+for Sub = 2:3
     cd(EmotionalDir(Sub).name)
     edfFiles = dir('*.edf');
     BehaviorData = dir('*0*.mat');
+    clear FileCombine;
     for loops = 1:length(edfFiles)
         
         % load the raw edf data and convert it to SPM format
