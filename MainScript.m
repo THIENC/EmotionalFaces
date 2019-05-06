@@ -1,16 +1,11 @@
 %% Pipeline script for emotional faces
 
-% % Add SPM
-% % addpath('C:\Users\THIENC\Desktop\spm12_7219');
-% addpath('D:\spm12_7219');
-% spm('defaults', 'EEG');
-% 
-% % Add path
-% % addpath(genpath('C:\Users\THIENC\Desktop\EmotionalFaces'))
-% addpath(genpath('D:\EmotionalFaces'))
 clear
 % path manipulation
-[ScriptFolder,SubjectFolder] = PathManipulation('BaotianZ620');
+[ScriptFolder,SubjectFolder] = PathManipulation('Ziqing');
+
+%create index
+CreateIndexInUse
 
 % ScriptFolder = 'D:\EmotionalFaces';
 cd(ScriptFolder)
@@ -19,12 +14,12 @@ cd(ScriptFolder)
 cd(SubjectFolder)
 
 load('EmotionalFacesChannels.mat')
-cd('E:\EmotionalFaces')
+% cd('EmotionalFaces')
 EmotionalDir = dir(pwd);
-EmotionalDir = EmotionalDir(3:end);
+EmotionalDir = EmotionalDir(4:end);
 
 %% File IO
-for Sub = 2:3
+for Sub = 1
     cd(EmotionalDir(Sub).name)
     edfFiles = dir('*.edf');
     BehaviorData = dir('*0*.mat');
@@ -36,7 +31,7 @@ for Sub = 2:3
         
         % load and convert the DC channel
         [DC,Index] = edf_TO_SPM_converter_GUI(edfFiles(loops).name,IndexInUse(Sub).DCChannel,'DC_');
-        
+               
        %% Channel Rename
         % Channel_Renaming_UI
         % pause

@@ -1,8 +1,10 @@
 %
-clear
-PatientList = [32,33,35,37:40,42:47];
+% clear
+% PatientList = [32,33,35,37:40,42:47,52];
+PatientList = [52];
 IndexInUse = struct;
-cd('E:\EmotionalFaces')
+% cd('F:\EmotionalFaces')
+cd('D:\EmotionalFaces_preprocessing_data')
 MainDir = dir('*0*');
 for i = 1:length(PatientList)
     for j = 1:length(MainDir)
