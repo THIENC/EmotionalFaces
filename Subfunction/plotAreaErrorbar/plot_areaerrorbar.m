@@ -33,10 +33,12 @@ function plot_areaerrorbar(data, options)
     % Default options
     if(nargin<2)
         options.handle     = figure(1);
-        options.color_area = [128 193 219]./255;    % Blue theme
+        options.color_area = [128 193 219]./255;    % Blue theme 
         options.color_line = [ 52 148 186]./255;
-        %options.color_area = [243 169 114]./255;    % Orange theme
-        %options.color_line = [236 112  22]./255;
+%         options.color_area = [243 169 114]./255;    % Orange theme 
+%         options.color_line = [236 112  22]./255;
+        options.color_area = [255 200 200]./255;   % yellow theme
+        options.color_line = [255 200 22]./255;
         options.alpha      = 0.5;
         options.line_width = 2;
         options.error      = 'std';
