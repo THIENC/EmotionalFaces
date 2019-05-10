@@ -121,7 +121,7 @@ for Sub = 2:3
         difference = timeStampDCNew - timeStampBehaviorNew;
         print(['Behavioral_DC_' num2str(loops)],'-dpng')
         if ~all(abs(difference) < 0.01)
-            error('Behavioral timestamp  and DC timestamp mismatch')
+            error('Behavioral timestamp and DC timestamp mismatch')
         end
         cd ..
         
@@ -132,7 +132,7 @@ for Sub = 2:3
             trl(i,3) = -600;
         end
         
-        % Define Lables
+        % Define Labels
         TagsRaw = orderData(2:3:90)';
         for i = 1:length(TagsRaw)
             if contains(TagsRaw{i},'angry','IgnoreCase',true)
