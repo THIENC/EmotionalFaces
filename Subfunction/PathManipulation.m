@@ -4,7 +4,7 @@ function  [ScriptFolder,SubjectFolder] = PathManipulation(User)
 switch User
     case 'BaotianMacmini'
         % Add SPM
-        % addpath('C:\Users\THIENC\Desktop\spm12_7219');
+       
         addpath('/Users/Baotian/Desktop/ToolBoxes/spm12');
         spm('defaults', 'EEG');
         
@@ -15,7 +15,7 @@ switch User
         SubjectFolder = '/Users/Baotian/Desktop/Data/EmotionalFaces/PT050';
     case 'BaotianZ620'
         % Add SPM
-        % addpath('C:\Users\THIENC\Desktop\spm12_7219');
+        
         addpath('D:\spm12_7219');
         spm('defaults', 'EEG');
         
@@ -24,6 +24,18 @@ switch User
         addpath(genpath('D:\EmotionalFaces'))
         ScriptFolder = 'D:\EmotionalFaces';
         SubjectFolder = 'E:\';
+    case 'Ziqing'
+        % Add SPM
+        
+        addpath('D:\³ÌÐò\spm12_7219\spm12_7219');
+        spm('defaults', 'EEG');
+        
+        % Add path
+        
+        addpath(genpath('D:\GitHub\EmotionalFaces'))
+        addpath(genpath('D:\EmotionalFaces_preprocessing_data'))
+        ScriptFolder = 'D:\GitHub\EmotionalFaces';
+        SubjectFolder = 'D:\EmotionalFaces_preprocessing_data';
 end
 
 end
